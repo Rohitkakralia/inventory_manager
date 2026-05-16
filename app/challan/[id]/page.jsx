@@ -130,34 +130,42 @@ export default function ChallanPDF() {
           </p>
 
           <div className="rounded-lg border border-gray-200 overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-blue-50 text-blue-800">
-                <tr>
-                  <th className="px-4 py-3 text-center font-medium w-10">#</th>
-                  <th className="px-4 py-3 text-left font-medium">Item</th>
-                  <th className="px-4 py-3 text-center font-medium w-24">Qty</th>
-                  <th className="px-4 py-3 text-left font-medium">Remarks</th>
-                </tr>
-              </thead>
-              <tbody>
-                {challanData.items?.map((item, i) => (
-                  <tr key={i} className="border-t border-gray-100">
-                    <td className="px-4 py-3 text-center text-gray-400">{i + 1}</td>
-                    <td className="px-4 py-3">
-                      <p className="font-medium text-gray-900">{item.name}</p>
-                      <p className="text-xs text-gray-400">Item description</p>
-                    </td>
-                    <td className="px-4 py-3 text-center text-gray-600">
-                      {item.quantity} each
-                    </td>
-                    <td className="px-4 py-3 text-gray-400">
-                      Good condition
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+  <table className="w-full text-sm">
+    <thead className="bg-blue-50 text-blue-800">
+      <tr>
+        <th className="px-4 py-3 text-center font-medium w-10">#</th>
+        <th className="px-4 py-3 text-left font-medium">Item</th>
+        <th className="px-4 py-3 text-center font-medium w-20">Qty</th>
+        <th className="px-4 py-3 text-right font-medium w-28">Rate</th>
+        <th className="px-4 py-3 text-right font-medium w-32">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {challanData.items?.map((item, i) => {
+        const rate = item.rate ?? (item.quantity ? Number(challanData.amount) / item.quantity : 0);
+        const total = item.total ?? rate * item.quantity;
+        return (
+          <tr key={i} className="border-t border-gray-100 hover:bg-gray-50">
+            <td className="px-4 py-3 text-center text-gray-400">{i + 1}</td>
+            <td className="px-4 py-3">
+              <p className="font-medium text-gray-900">{item.name}</p>
+              <p className="text-xs text-gray-400">{item.description || "Product description"}</p>
+            </td>
+            <td className="px-4 py-3 text-center text-gray-600">
+              {item.quantity} each
+            </td>
+            <td className="px-4 py-3 text-right text-gray-700">
+              ₹ {Number(rate).toLocaleString("en-IN")}
+            </td>
+            <td className="px-4 py-3 text-right font-medium text-gray-900">
+              ₹ {Number(total).toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+</div>
         </div>
 
         {/* ── TERMS + SUMMARY ── */}
